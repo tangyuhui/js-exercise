@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	 <script>
+	     var util={
+          	convertKey:function(originalObj,mapping){ 
+                function startdeal(obj,mapping){
+		      		 var keys=Object.keys(obj);
+		              for(var i=0;i<keys.length;i++){
+
+						 var property=keys[i];
+		            	 var newproperty=mapping[property];
+		            	 if(typeof newproperty==="object"){
+						   obj[newproperty.own]=obj[property];
+						   
+		                    if(Object.prototype.toString.call(obj[property]) === '[object Array]'){
+                                  obj[property].forEach(function(item,index,array){
+                                 startdeal(item,newproperty.child);
+							  }); 
+		            	     }else if(typeof obj[property]==='object'){
+						       startdeal(obj[newproperty.own],newproperty.child);
+		            	     }
+		            	 }else{
+						 
+						    obj[newproperty]=obj[property];
+	
+		            	 } 
+		                 delete obj[property];
+						 } 
+	              }	
+  
+          		
+		         startdeal(originalObj,mapping);  
+                 return originalObj;  
+          	}  
+ }
+          // var a= '[{ "a": "xiao ming", "b": "18", "c": [ { "a": "Zootopia", "b":  109 , "c": "tt2948356" }, { "a": "Hacksaw Ridge", "b": 139, "c": "tt2119532" }, { "a": "Kiminona", "b":  106 , "c": "tt5311514"}]}]';
+          var obj=[{a:'唐钰惠',b:[{a:'5年',b:'7年'}],c:{a:90,b:92}}];
+          var mainMapping={'a':'姓名','b':{own:'喜好时长',child:{a:'游泳',b:'爬山'}},'c':{own:'成绩',child:{a:'数学',b:'英语'}}};
+           obj.map((item,index,array)=>{
+           
+                 return  util.convertKey(item,mainMapping);
+          });
+             
+          console.log(JSON.stringify(obj));
+ 
+       
+	 </script>
+</head>
+<body>
+	
+</body>
+</html>
